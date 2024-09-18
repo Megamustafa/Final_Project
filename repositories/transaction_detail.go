@@ -48,7 +48,7 @@ func (tdr *TransactionDetailRepositoryImpl) Create(tdReq models.TransactionDetai
 		return models.TransactionDetail{}, err
 	}
 
-	amount := tdReq.Quantity * uint(product.Price)
+	amount := float64(tdReq.Quantity) * float64(product.Price)
 	var transactionDetail models.TransactionDetail = models.TransactionDetail{
 		TransactionID: tdReq.TransactionID,
 		ProductID:     tdReq.ProductID,
@@ -74,14 +74,18 @@ func (tdr *TransactionDetailRepositoryImpl) Create(tdReq models.TransactionDetai
 
 	currentDetails := transactionData.TransactionDetails
 
-	var totalAmounttmp uint
+	var totalAmounttmp float64
 
 	for _, detail := range currentDetails {
 		totalAmounttmp += detail.Amount
 	}
 
 	transactionData.TotalAmount = totalAmounttmp
+	if transactionData.PromoCodeID != 0 {
+		discountedTotalAmount := totalAmounttmp - (totalAmounttmp * transactionData.PromoCode.DiscountPercentage)
 
+		transactionData.TotalAmount = discountedTotalAmount
+	}
 	if err := database.DB.Save(&transactionData).Error; err != nil {
 		return models.TransactionDetail{}, err
 	}
@@ -102,7 +106,7 @@ func (tdr *TransactionDetailRepositoryImpl) Update(tdReq models.TransactionDetai
 		return models.TransactionDetail{}, err
 	}
 
-	amount := tdReq.Quantity * uint(product.Price)
+	amount := float64(tdReq.Quantity) * float64(product.Price)
 
 	transactionDetail.ProductID = tdReq.ProductID
 	transactionDetail.Quantity = tdReq.Quantity
@@ -119,13 +123,19 @@ func (tdr *TransactionDetailRepositoryImpl) Update(tdReq models.TransactionDetai
 	}
 
 	currentDetails := transactionData.TransactionDetails
-	var totalAmounttmp uint
+	var totalAmounttmp float64
 
 	for _, detail := range currentDetails {
 		totalAmounttmp += detail.Amount
 	}
 
 	transactionData.TotalAmount = totalAmounttmp
+
+	if transactionData.PromoCodeID != 0 {
+		discountedTotalAmount := totalAmounttmp - (totalAmounttmp * transactionData.PromoCode.DiscountPercentage)
+
+		transactionData.TotalAmount = discountedTotalAmount
+	}
 
 	if err := database.DB.Save(&transactionData).Error; err != nil {
 		return models.TransactionDetail{}, err

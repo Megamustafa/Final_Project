@@ -35,3 +35,15 @@ type Farm struct {
 	Price       int            `json:"price"`
 	FarmType    FarmType       `json:"farm_type"`
 }
+
+type FarmCondition struct {
+	ID          uint           `json:"id" gorm:"primarykey"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+	FarmID      uint           `json:"farm_id"`
+	Temperature float64        `json:"temperature"`
+	PH          float64        `json:"ph"`
+	OxygenLevel float64        `json:"oxygen_level"`
+	Farm        Farm           `json:"farm"`
+}

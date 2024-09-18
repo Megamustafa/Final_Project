@@ -111,4 +111,18 @@ func SetupRoutes(e *echo.Echo) {
 	articleRoutes.PUT("/:id", articleController.Update)
 	articleRoutes.DELETE("/:id", articleController.Delete)
 
+	farmConditionController := controllers.InitFarmConditionController()
+	farmConditionRoutes := e.Group("/api/v1/farms/conditions", echojwt.WithConfig(authMiddlewareConfig))
+	farmConditionRoutes.GET("", farmConditionController.GetAll)
+	farmConditionRoutes.GET("/:id", farmConditionController.GetByID)
+	farmConditionRoutes.POST("", farmConditionController.Create)
+	farmConditionRoutes.PUT("/:id", farmConditionController.Update)
+
+	promoCodeController := controllers.InitPromoCodeController()
+	promoCodeRoutes := e.Group("/api/v1/transactions/promo", echojwt.WithConfig(authMiddlewareConfig))
+	promoCodeRoutes.GET("", promoCodeController.GetAll)
+	promoCodeRoutes.GET("/:id", promoCodeController.GetByID)
+	promoCodeRoutes.POST("", promoCodeController.Create)
+	promoCodeRoutes.PUT("/:id", promoCodeController.Update)
+
 }

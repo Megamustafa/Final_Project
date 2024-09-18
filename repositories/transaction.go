@@ -39,6 +39,9 @@ func (tr *TransactionRepositoryImpl) Create(tReq models.TransactionRequest) (mod
 		PaymentMethod: tReq.PaymentMethod,
 	}
 
+	if tReq.PromoCodeID != 0 {
+		transaction.PromoCodeID = tReq.PromoCodeID
+	}
 	result := database.DB.Create(&transaction)
 
 	if err := result.Error; err != nil {
@@ -60,7 +63,7 @@ func (tr *TransactionRepositoryImpl) Update(tReq models.TransactionRequest, id s
 	}
 
 	transaction.UserID = tReq.UserID
-	transaction.TotalAmount = tReq.TotalAmount
+	transaction.TotalAmount = float64(tReq.TotalAmount)
 	transaction.Status = tReq.Status
 	transaction.PaymentMethod = tReq.PaymentMethod
 

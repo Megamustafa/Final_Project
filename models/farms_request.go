@@ -17,6 +17,13 @@ type FarmRequest struct {
 	Price       int    `json:"price" validate:"required"`
 }
 
+type FarmConditionRequest struct {
+	FarmID      uint    `json:"farm_id" validate:"required"`
+	Temperature float64 `json:"temperature" validate:"required"`
+	PH          float64 `json:"ph" validate:"required"`
+	OxygenLevel float64 `json:"oxygen_level" validate:"required"`
+}
+
 func (af *AquacultureFarmsRequest) Validate() error {
 	validate := validator.New()
 
@@ -37,6 +44,14 @@ func (f *FarmRequest) Validate() error {
 	validate := validator.New()
 
 	err := validate.Struct(f)
+
+	return err
+}
+
+func (fc *FarmConditionRequest) Validate() error {
+	validate := validator.New()
+
+	err := validate.Struct(fc)
 
 	return err
 }

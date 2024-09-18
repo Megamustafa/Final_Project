@@ -71,3 +71,17 @@ type UserRepository interface {
 	GetUserInfo(id string) (models.User, error)
 	GetAdminInfo(id string) (models.Admin, error)
 }
+
+type FarmConditionRepository interface {
+	GetAll() ([]models.FarmCondition, error)
+	GetByID(id string) (models.FarmCondition, error)
+	Create(fcReq models.FarmConditionRequest) (models.FarmCondition, error)
+	Update(fcReq models.FarmConditionRequest, id string) (models.FarmCondition, error)
+}
+
+type PromoCodeRepository interface {
+	GetAll() ([]models.PromoCode, error)
+	GetByID(id string) (models.PromoCode, error)
+	Create(pcReq models.PromoCodeRequest) (models.PromoCode, error)
+	Update(pcReq models.PromoCodeRequest, id string) (models.PromoCode, error)
+}
