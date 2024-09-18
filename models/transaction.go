@@ -24,7 +24,6 @@ type TransactionDetail struct {
 	UpdatedAt     time.Time      `json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	TransactionID uint           `json:"transaction_id"`
-	Date          time.Time      `json:"date"`
 	ProductID     uint           `json:"product_id"`
 	Quantity      uint           `json:"quantity"`
 	Amount        uint           `json:"amount"`
