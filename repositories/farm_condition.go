@@ -17,13 +17,13 @@ func (fc *FarmConditionRepositoryImpl) GetAll() ([]models.FarmCondition, error) 
 	if err := database.DB.Preload("Farm").Find(&farmConditions).Error; err != nil {
 		return []models.FarmCondition{}, err
 	}
-	return []models.FarmCondition{}, nil
+	return farmConditions, nil
 }
 
 func (fc *FarmConditionRepositoryImpl) GetByID(id string) (models.FarmCondition, error) {
 	var farmCondition models.FarmCondition
 
-	if err := database.DB.Preload("Farm").Find(&farmCondition).Error; err != nil {
+	if err := database.DB.Preload("Farm").First(&farmCondition, "id = ?", id).Error; err != nil {
 		return models.FarmCondition{}, err
 	}
 
