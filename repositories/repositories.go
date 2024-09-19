@@ -46,7 +46,7 @@ type TransactionRepository interface {
 	GetAll() ([]models.Transaction, error)
 	GetByID(id string) (models.Transaction, error)
 	Create(tReq models.TransactionRequest) (models.Transaction, error)
-	Update(tReq models.TransactionRequest, id string) (models.Transaction, error)
+	Update(tReq models.TransactionStatusRequest, id string) (models.Transaction, error)
 }
 
 type TransactionDetailRepository interface {

@@ -27,6 +27,6 @@ func (ts *TransactionService) Create(tReq models.TransactionRequest) (models.Tra
 	return ts.Repository.Create(tReq)
 }
 
-func (ts *TransactionService) Update(tReq models.TransactionRequest, id string) (models.Transaction, error) {
+func (ts *TransactionService) Update(tReq models.TransactionStatusRequest, id string) (models.Transaction, error) {
 	return ts.Repository.Update(tReq, id)
 }

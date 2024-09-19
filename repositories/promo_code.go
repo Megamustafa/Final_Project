@@ -3,6 +3,9 @@ package repositories
 import (
 	"aquaculture/database"
 	"aquaculture/models"
+	"time"
+
+	"gorm.io/datatypes"
 )
 
 type PromoCodeRepositoryImpl struct{}
@@ -32,10 +35,13 @@ func (pc *PromoCodeRepositoryImpl) GetByID(id string) (models.PromoCode, error) 
 }
 
 func (pc *PromoCodeRepositoryImpl) Create(pcReq models.PromoCodeRequest) (models.PromoCode, error) {
+	validFrom, _ := time.Parse("02-01-2006", pcReq.ValidFrom)
+	validUntil, _ := time.Parse("02-01-2006", pcReq.ValidUntil)
+
 	var promoCode models.PromoCode = models.PromoCode{
 		DiscountPercentage: pcReq.DiscountPercentage,
-		ValidFrom:          pcReq.ValidFrom,
-		ValidUntil:         pcReq.ValidUntil,
+		ValidFrom:          datatypes.Date(validFrom),
+		ValidUntil:         datatypes.Date(validUntil),
 		Status:             pcReq.Status,
 	}
 
@@ -59,9 +65,12 @@ func (pc *PromoCodeRepositoryImpl) Update(pcReq models.PromoCodeRequest, id stri
 		return models.PromoCode{}, err
 	}
 
+	validFrom, _ := time.Parse("02-01-2006", pcReq.ValidFrom)
+	validUntil, _ := time.Parse("02-01-2006", pcReq.ValidUntil)
+
 	promoCode.DiscountPercentage = pcReq.DiscountPercentage
-	promoCode.ValidFrom = pcReq.ValidFrom
-	promoCode.ValidUntil = pcReq.ValidUntil
+	promoCode.ValidFrom = datatypes.Date(validFrom)
+	promoCode.ValidUntil = datatypes.Date(validUntil)
 	promoCode.Status = pcReq.Status
 
 	if err := database.DB.Save(&promoCode).Error; err != nil {

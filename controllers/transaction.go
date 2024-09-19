@@ -134,18 +134,8 @@ func (tc *TransactionController) Create(c echo.Context) error {
 }
 
 func (tc *TransactionController) Update(c echo.Context) error {
-	claim, err := middlewares.GetUser(c)
 
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, models.Response[string]{
-			Status:  "failed",
-			Message: "user not found",
-		})
-	}
-
-	var tReq models.TransactionRequest
-
-	tReq.UserID = uint(claim.ID)
+	var tReq models.TransactionStatusRequest
 
 	if err := verifyUserT(c, tc); err != nil {
 		return c.JSON(http.StatusBadRequest, models.Response[string]{
@@ -162,7 +152,7 @@ func (tc *TransactionController) Update(c echo.Context) error {
 
 	transactionID := c.Param("id")
 
-	err = tReq.Validate()
+	err := tReq.Validate()
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, models.Response[string]{

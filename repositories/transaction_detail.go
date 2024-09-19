@@ -75,21 +75,24 @@ func (tdr *TransactionDetailRepositoryImpl) Create(tdReq models.TransactionDetai
 	currentDetails := transactionData.TransactionDetails
 
 	var totalAmounttmp float64
+	var totalAmount float64
 
 	for _, detail := range currentDetails {
 		totalAmounttmp += detail.Amount
 	}
 
-	transactionData.TotalAmount = totalAmounttmp
-	if transactionData.PromoCodeID != 0 {
-		discountedTotalAmount := totalAmounttmp - (totalAmounttmp * transactionData.PromoCode.DiscountPercentage)
+	// transactionData.TotalAmount = totalAmounttmp
+	totalAmount = totalAmounttmp
 
-		transactionData.TotalAmount = discountedTotalAmount
+	if transactionData.PromoCodeID != 0 {
+		discountedTotalAmount := (1 - transactionData.PromoCode.DiscountPercentage) * totalAmounttmp
+
+		totalAmount = discountedTotalAmount
 	}
-	if err := database.DB.Save(&transactionData).Error; err != nil {
+
+	if err := database.DB.Model(&transactionData).Update("total_amount", totalAmount).Error; err != nil {
 		return models.TransactionDetail{}, err
 	}
-
 	return transactionDetail, nil
 }
 
@@ -124,20 +127,21 @@ func (tdr *TransactionDetailRepositoryImpl) Update(tdReq models.TransactionDetai
 
 	currentDetails := transactionData.TransactionDetails
 	var totalAmounttmp float64
+	var totalAmount float64
 
 	for _, detail := range currentDetails {
 		totalAmounttmp += detail.Amount
 	}
 
-	transactionData.TotalAmount = totalAmounttmp
+	totalAmount = totalAmounttmp
 
 	if transactionData.PromoCodeID != 0 {
-		discountedTotalAmount := totalAmounttmp - (totalAmounttmp * transactionData.PromoCode.DiscountPercentage)
+		discountedTotalAmount := (1 - transactionData.PromoCode.DiscountPercentage) * totalAmounttmp
 
-		transactionData.TotalAmount = discountedTotalAmount
+		totalAmount = discountedTotalAmount
 	}
 
-	if err := database.DB.Save(&transactionData).Error; err != nil {
+	if err := database.DB.Model(&transactionData).Update("total_amount", totalAmount).Error; err != nil {
 		return models.TransactionDetail{}, err
 	}
 

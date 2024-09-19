@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -23,7 +24,7 @@ type Transaction struct {
 	Status             string              `json:"status"`
 	PaymentMethod      string              `json:"payment_method"`
 	TransactionDetails []TransactionDetail `json:"transaction_details"`
-	PromoCodeID        uint                `json:"promo_code_id"`
+	PromoCodeID        uint                `json:"promo_code_id" gorm:"default:null"`
 	PromoCode          PromoCode           `json:"promo_code"`
 }
 
@@ -44,7 +45,7 @@ type PromoCode struct {
 	UpdatedAt          time.Time      `json:"updated_at"`
 	DeletedAt          gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	DiscountPercentage float64        `json:"discount_percentage"`
-	ValidFrom          time.Time      `json:"valid_from"`
-	ValidUntil         time.Time      `json:"valid_until"`
+	ValidFrom          datatypes.Date `json:"valid_from"`
+	ValidUntil         datatypes.Date `json:"valid_until"`
 	Status             Status         `json:"status" gorm:"type:enum('active', 'inactive')"`
 }
