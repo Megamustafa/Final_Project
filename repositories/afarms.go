@@ -14,7 +14,7 @@ func InitAquacultureFarmRepository() AquacultureFarmsRepository {
 func (afr *AquacultureFarmsRepositoryImpl) GetAll() ([]models.AquacultureFarms, error) {
 	var aquaculturefarms []models.AquacultureFarms
 
-	if err := database.DB.Preload("User").Preload("Farm").Find(&aquaculturefarms).Error; err != nil {
+	if err := database.DB.Preload("User").Preload("Farm.FarmType").Find(&aquaculturefarms).Error; err != nil {
 		return []models.AquacultureFarms{}, err
 	}
 
@@ -24,7 +24,7 @@ func (afr *AquacultureFarmsRepositoryImpl) GetAll() ([]models.AquacultureFarms, 
 func (afr *AquacultureFarmsRepositoryImpl) GetByID(id string) (models.AquacultureFarms, error) {
 	var aquaculturefarm models.AquacultureFarms
 
-	if err := database.DB.Preload("User").Preload("Farm").First(&aquaculturefarm, "id = ?", id).Error; err != nil {
+	if err := database.DB.Preload("User").Preload("Farm.FarmType").First(&aquaculturefarm, "id = ?", id).Error; err != nil {
 		return models.AquacultureFarms{}, err
 	}
 
@@ -43,7 +43,7 @@ func (afr *AquacultureFarmsRepositoryImpl) Create(afReqReq models.AquacultureFar
 		return models.AquacultureFarms{}, err
 	}
 
-	if err := result.Preload("User").Preload("Farm").Last(&aquaculturefarm).Error; err != nil {
+	if err := result.Preload("User").Preload("Farm.FarmType").Last(&aquaculturefarm).Error; err != nil {
 		return models.AquacultureFarms{}, err
 	}
 
@@ -60,7 +60,7 @@ func (afr *AquacultureFarmsRepositoryImpl) Update(afReq models.AquacultureFarmsR
 	aquaculturefarm.UserID = afReq.UserID
 	aquaculturefarm.FarmID = afReq.FarmID
 
-	if err := database.DB.Preload("User").Preload("Farm").Save(&aquaculturefarm).Error; err != nil {
+	if err := database.DB.Preload("User").Preload("Farm.FarmType").Save(&aquaculturefarm).Error; err != nil {
 		return models.AquacultureFarms{}, err
 	}
 

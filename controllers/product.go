@@ -179,3 +179,30 @@ func (pc *ProductController) Delete(c echo.Context) error {
 		Message: "product deleted",
 	})
 }
+
+func (pc *ProductController) ImportFromCSV(c echo.Context) error {
+	var filename string
+
+	if err := verifyAdminP(c, pc); err != nil {
+		return c.JSON(http.StatusBadRequest, models.Response[string]{
+			Status:  "failed",
+			Message: "invalid request",
+		})
+	}
+
+	products, err := pc.service.ImportFromCSV(filename)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.Response[string]{
+			Status:  "failed",
+			Message: "failed to import products",
+		})
+	}
+
+	return c.JSON(http.StatusCreated, models.Response[[]models.Product]{
+		Status:  "success",
+		Message: "products imported",
+		Data:    products,
+	})
+
+}

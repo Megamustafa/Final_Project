@@ -70,18 +70,18 @@ func TestCreateTransaction(t *testing.T) {
 
 func TestUpdateTransaction(t *testing.T) {
 	t.Run("Update Transaction | Valid", func(t *testing.T) {
-		transactionRepository.On("Update", models.TransactionRequest{}, "1").Return(models.Transaction{}, nil).Once()
+		transactionRepository.On("Update", models.TransactionStatusRequest{}, "1").Return(models.Transaction{}, nil).Once()
 
-		result, err := transactionService.Update(models.TransactionRequest{}, "1")
+		result, err := transactionService.Update(models.TransactionStatusRequest{}, "1")
 
 		assert.NotNil(t, result)
 		assert.Nil(t, err)
 	})
 
 	t.Run("Update Transaction | Invalid", func(t *testing.T) {
-		transactionRepository.On("Update", models.TransactionRequest{}, "-1").Return(models.Transaction{}, errors.New("whoops")).Once()
+		transactionRepository.On("Update", models.TransactionStatusRequest{}, "-1").Return(models.Transaction{}, errors.New("whoops")).Once()
 
-		result, err := transactionService.Update(models.TransactionRequest{}, "-1")
+		result, err := transactionService.Update(models.TransactionStatusRequest{}, "-1")
 
 		assert.NotNil(t, result)
 		assert.NotNil(t, err)

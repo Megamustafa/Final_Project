@@ -34,3 +34,7 @@ func (ps *ProductService) Update(productReq models.ProductRequest, id string) (m
 func (ps *ProductService) Delete(id string) error {
 	return ps.Repository.Delete(id)
 }
+
+func (ps *ProductService) ImportFromCSV(filename string) ([]models.Product, error) {
+	return ps.Repository.ImportFromCSV(filename)
+}

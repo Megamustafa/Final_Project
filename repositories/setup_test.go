@@ -35,6 +35,12 @@ var (
 
 	transactionRepository mocks.TransactionRepository
 	transactionService    services.TransactionService
+
+	farmConditionRepository mocks.FarmConditionRepository
+	farmConditionService    services.FarmConditionService
+
+	promoCodeRepository mocks.PromoCodeRepository
+	promoCodeService    services.PromoCodeService
 )
 
 func TestMain(m *testing.M) {
@@ -65,6 +71,12 @@ func TestMain(m *testing.M) {
 
 	transactionService = services.InitTransactionService()
 	transactionService.Repository = &transactionRepository
+
+	farmConditionService = services.InitFarmConditionService()
+	farmConditionService.Repository = &farmConditionRepository
+
+	promoCodeService = services.InitPromoCodeService()
+	promoCodeService.Repository = &promoCodeRepository
 
 	os.Exit(m.Run())
 }

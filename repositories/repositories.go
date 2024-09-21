@@ -8,6 +8,7 @@ type ProductRepository interface {
 	Create(productReq models.ProductRequest) (models.Product, error)
 	Update(productReq models.ProductRequest, id string) (models.Product, error)
 	Delete(id string) error
+	ImportFromCSV(filename string) ([]models.Product, error)
 }
 
 type AquacultureFarmsRepository interface {

@@ -100,7 +100,7 @@ func (_m *TransactionRepository) GetByID(id string) (models.Transaction, error) 
 }
 
 // Update provides a mock function with given fields: tReq, id
-func (_m *TransactionRepository) Update(tReq models.TransactionRequest, id string) (models.Transaction, error) {
+func (_m *TransactionRepository) Update(tReq models.TransactionStatusRequest, id string) (models.Transaction, error) {
 	ret := _m.Called(tReq, id)
 
 	if len(ret) == 0 {
@@ -109,16 +109,16 @@ func (_m *TransactionRepository) Update(tReq models.TransactionRequest, id strin
 
 	var r0 models.Transaction
 	var r1 error
-	if rf, ok := ret.Get(0).(func(models.TransactionRequest, string) (models.Transaction, error)); ok {
+	if rf, ok := ret.Get(0).(func(models.TransactionStatusRequest, string) (models.Transaction, error)); ok {
 		return rf(tReq, id)
 	}
-	if rf, ok := ret.Get(0).(func(models.TransactionRequest, string) models.Transaction); ok {
+	if rf, ok := ret.Get(0).(func(models.TransactionStatusRequest, string) models.Transaction); ok {
 		r0 = rf(tReq, id)
 	} else {
 		r0 = ret.Get(0).(models.Transaction)
 	}
 
-	if rf, ok := ret.Get(1).(func(models.TransactionRequest, string) error); ok {
+	if rf, ok := ret.Get(1).(func(models.TransactionStatusRequest, string) error); ok {
 		r1 = rf(tReq, id)
 	} else {
 		r1 = ret.Error(1)

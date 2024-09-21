@@ -117,6 +117,36 @@ func (_m *ProductRepository) GetByID(id string) (models.Product, error) {
 	return r0, r1
 }
 
+// ImportFromCSV provides a mock function with given fields: filename
+func (_m *ProductRepository) ImportFromCSV(filename string) ([]models.Product, error) {
+	ret := _m.Called(filename)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ImportFromCSV")
+	}
+
+	var r0 []models.Product
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) ([]models.Product, error)); ok {
+		return rf(filename)
+	}
+	if rf, ok := ret.Get(0).(func(string) []models.Product); ok {
+		r0 = rf(filename)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]models.Product)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(filename)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Update provides a mock function with given fields: productReq, id
 func (_m *ProductRepository) Update(productReq models.ProductRequest, id string) (models.Product, error) {
 	ret := _m.Called(productReq, id)

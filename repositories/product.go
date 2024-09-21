@@ -3,6 +3,9 @@ package repositories
 import (
 	"aquaculture/database"
 	"aquaculture/models"
+	"encoding/csv"
+	"os"
+	"strconv"
 )
 
 type ProductRepositoryImpl struct{}
@@ -81,4 +84,42 @@ func (pr *ProductRepositoryImpl) Delete(id string) error {
 	}
 
 	return nil
+}
+
+func (pr *ProductRepositoryImpl) ImportFromCSV(filename string) ([]models.Product, error) {
+
+	csvFile, err := os.Open(filename)
+
+	if err != nil {
+		return []models.Product{}, err
+	}
+
+	defer csvFile.Close()
+
+	reader := csv.NewReader(csvFile)
+
+	records, err := reader.ReadAll()
+
+	if err != nil {
+		return []models.Product{}, err
+	}
+
+	var products []models.Product = []models.Product{}
+
+	for idx, eachrecord := range records {
+
+		if idx == 0 {
+			continue
+		}
+		price, _ := strconv.Atoi(eachrecord[1])
+
+		products = append(products, models.Product{Description: eachrecord[0], Price: price})
+	}
+
+	if err := database.DB.Create(&products).Error; err != nil {
+		return []models.Product{}, err
+	}
+
+	return products, nil
+
 }
