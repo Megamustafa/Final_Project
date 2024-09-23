@@ -2,37 +2,41 @@ package database
 
 import (
 	"aquaculture/models"
-	"aquaculture/utils"
 	"fmt"
 	"log"
+	"os"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 var (
-	DB_USERNAME string = utils.GetConfig("DB_USERNAME")
-	DB_PASSWORD string = utils.GetConfig("DB_PASSWORD")
-	DB_NAME     string = utils.GetConfig("DB_NAME")
-	DB_HOST     string = utils.GetConfig("DB_HOST")
-	DB_PORT     string = utils.GetConfig("DB_PORT")
+	DB_USERNAME string = os.Getenv("DB_USERNAME")
+	DB_PASSWORD string = os.Getenv("DB_PASSWORD")
+	DB_NAME     string = os.Getenv("DB_NAME")
+	DB_HOST     string = os.Getenv("DB_HOST")
+	DB_PORT     string = os.Getenv("DB_PORT")
 )
 
 func InitDB() {
 	var err error
 
 	var dsn string = fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		"user=%s password=%s host=%s port=%s dbname=%s",
 		DB_USERNAME,
 		DB_PASSWORD,
 		DB_HOST,
 		DB_PORT,
 		DB_NAME,
 	)
+	pgConfig := postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	})
 
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(pgConfig, &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("error when connecting to the database: %s\n", err)
