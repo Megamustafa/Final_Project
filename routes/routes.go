@@ -56,7 +56,7 @@ func SetupRoutes(e *echo.Echo) {
 	productRoutes.POST("", productController.Create)
 	productRoutes.PUT("/:id", productController.Update)
 	productRoutes.DELETE("/:id", productController.Delete)
-	productRoutes.POST("", productController.ImportFromCSV)
+	productRoutes.POST("/import", productController.ImportFromCSV)
 
 	productTypeController := controllers.InitProductTypeController()
 	productTypeRoutes := e.Group("/api/v1/products/types", echojwt.WithConfig(authMiddlewareConfig))

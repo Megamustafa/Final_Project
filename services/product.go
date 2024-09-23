@@ -3,6 +3,7 @@ package services
 import (
 	"aquaculture/models"
 	"aquaculture/repositories"
+	"mime/multipart"
 )
 
 type ProductService struct {
@@ -35,6 +36,6 @@ func (ps *ProductService) Delete(id string) error {
 	return ps.Repository.Delete(id)
 }
 
-func (ps *ProductService) ImportFromCSV(filename string) ([]models.Product, error) {
-	return ps.Repository.ImportFromCSV(filename)
+func (ps *ProductService) ImportFromCSV(file *multipart.FileHeader) ([]models.Product, error) {
+	return ps.Repository.ImportFromCSV(file)
 }

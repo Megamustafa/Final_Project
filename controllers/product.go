@@ -4,7 +4,9 @@ import (
 	"aquaculture/middlewares"
 	"aquaculture/models"
 	"aquaculture/services"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -181,7 +183,6 @@ func (pc *ProductController) Delete(c echo.Context) error {
 }
 
 func (pc *ProductController) ImportFromCSV(c echo.Context) error {
-	var filename string
 
 	if err := verifyAdminP(c, pc); err != nil {
 		return c.JSON(http.StatusBadRequest, models.Response[string]{
@@ -190,7 +191,39 @@ func (pc *ProductController) ImportFromCSV(c echo.Context) error {
 		})
 	}
 
-	products, err := pc.service.ImportFromCSV(filename)
+	file, err := c.FormFile("file")
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, models.Response[string]{
+			Status:  "failed",
+			Message: "invalid request",
+		})
+	}
+	src, err := file.Open()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, models.Response[string]{
+			Status:  "failed",
+			Message: "invalid request",
+		})
+	}
+	defer src.Close()
+
+	dst, err := os.Create(file.Filename)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, models.Response[string]{
+			Status:  "failed",
+			Message: "invalid request",
+		})
+	}
+	defer dst.Close()
+
+	if _, err = io.Copy(dst, src); err != nil {
+		return c.JSON(http.StatusBadRequest, models.Response[string]{
+			Status:  "failed",
+			Message: "invalid request",
+		})
+	}
+
+	products, err := pc.service.ImportFromCSV(file)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, models.Response[string]{

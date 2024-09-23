@@ -4,6 +4,7 @@ import (
 	"aquaculture/database"
 	"aquaculture/models"
 	"encoding/csv"
+	"mime/multipart"
 	"os"
 	"strconv"
 )
@@ -86,9 +87,9 @@ func (pr *ProductRepositoryImpl) Delete(id string) error {
 	return nil
 }
 
-func (pr *ProductRepositoryImpl) ImportFromCSV(filename string) ([]models.Product, error) {
+func (pr *ProductRepositoryImpl) ImportFromCSV(file *multipart.FileHeader) ([]models.Product, error) {
 
-	csvFile, err := os.Open(filename)
+	csvFile, err := os.Open(file.Filename)
 
 	if err != nil {
 		return []models.Product{}, err
@@ -111,9 +112,14 @@ func (pr *ProductRepositoryImpl) ImportFromCSV(filename string) ([]models.Produc
 		if idx == 0 {
 			continue
 		}
-		price, _ := strconv.Atoi(eachrecord[1])
+		productTypeID, _ := strconv.Atoi(eachrecord[0])
+		price, _ := strconv.Atoi(eachrecord[2])
 
-		products = append(products, models.Product{Description: eachrecord[0], Price: price})
+		products = append(products, models.Product{
+			ProductTypeID: uint(productTypeID),
+			Description:   eachrecord[1],
+			Price:         price,
+		})
 	}
 
 	if err := database.DB.Create(&products).Error; err != nil {

@@ -3,6 +3,7 @@ package repositories_test
 import (
 	"aquaculture/models"
 	"errors"
+	"mime/multipart"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -108,18 +109,18 @@ func TestDeleteProduct(t *testing.T) {
 
 func TestImportFromCSV(t *testing.T) {
 	t.Run("Import Products | Valid", func(t *testing.T) {
-		productRepository.On("ImportFromCSV", "filename.csv").Return([]models.Product{}, nil).Once()
+		productRepository.On("ImportFromCSV", &multipart.FileHeader{}).Return([]models.Product{}, nil).Once()
 
-		result, err := productService.ImportFromCSV("filename.csv")
+		result, err := productService.ImportFromCSV(&multipart.FileHeader{})
 
 		assert.NotNil(t, result)
 		assert.Nil(t, err)
 	})
 
 	t.Run("Import Products | Invalid", func(t *testing.T) {
-		productRepository.On("ImportFromCSV", "filename.csv").Return([]models.Product{}, errors.New("whoops")).Once()
+		productRepository.On("ImportFromCSV", &multipart.FileHeader{}).Return([]models.Product{}, errors.New("whoops")).Once()
 
-		result, err := productService.ImportFromCSV("filename.csv")
+		result, err := productService.ImportFromCSV(&multipart.FileHeader{})
 
 		assert.NotNil(t, result)
 		assert.NotNil(t, err)
