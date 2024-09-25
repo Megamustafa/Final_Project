@@ -3,6 +3,8 @@ package main
 import (
 	"aquaculture/database"
 	"aquaculture/routes"
+	"fmt"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -14,5 +16,6 @@ func main() {
 
 	routes.SetupRoutes(e)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	e.Logger.Fatal(e.Start(port))
 }

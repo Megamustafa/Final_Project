@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql/driver"
 	"time"
 
 	"gorm.io/datatypes"
@@ -13,6 +14,15 @@ const (
 	Active   Status = "active"
 	Inactive Status = "inactive"
 )
+
+func (p *Status) Scan(value interface{}) error {
+	*p = Status(value.([]byte))
+	return nil
+}
+
+func (p Status) Value() (driver.Value, error) {
+	return string(p), nil
+}
 
 type Transaction struct {
 	ID                 uint                `json:"id" gorm:"primarykey"`
@@ -47,5 +57,5 @@ type PromoCode struct {
 	DiscountPercentage float64        `json:"discount_percentage"`
 	ValidFrom          datatypes.Date `json:"valid_from"`
 	ValidUntil         datatypes.Date `json:"valid_until"`
-	Status             Status         `json:"status" gorm:"type:enum('active', 'inactive')"`
+	Status             Status         `json:"status" gorm:"type:status"`
 }
