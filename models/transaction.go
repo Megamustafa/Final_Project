@@ -16,7 +16,7 @@ const (
 )
 
 func (p *Status) Scan(value interface{}) error {
-	*p = Status(value.([]byte))
+	*p = Status(value.(string))
 	return nil
 }
 
