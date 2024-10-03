@@ -24,6 +24,7 @@ Performing transactions
 - View Transactions
 
 ## Tech Stacks
+- Golang: https://go.dev/
 - Echo Framework: https://echo.labstack.com/docs
 - Gorm: https://gorm.io/docs/
 - Echo JWT middleware: https://echo.labstack.com/docs/cookbook/jwt
@@ -32,6 +33,9 @@ Performing transactions
 - Vektra's Mockery: https://vektra.github.io/mockery/latest/installation/#go-install
 - Testify/Assert: https://github.com/stretchr/testify
 - Viper: https://github.com/spf13/viper
+- Docker: https://www.docker.com/
+- Koyeb: https://app.koyeb.com/
+- Supabase: https://supabase.com/
 
 ## API Documentation
 Postman: https://documenter.getpostman.com/view/37379650/2sAXqqc2op
